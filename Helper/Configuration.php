@@ -4,7 +4,7 @@ namespace MageSuite\Wishlist\Helper;
 
 class Configuration
 {
-    const XML_PATH_WISHLIST_ADDITIONAL_DATA_IS_ENABLED = 'wishlist/additional_data/is_enabled';
+    const XML_PATH_WISHLIST_ADDITIONAL_DATA_IS_ENABLED = 'wishlist_extended/additional_data/is_enabled';
 
     protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
