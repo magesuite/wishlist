@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    <referenceContainer name="page.wrapper" remove="true" />
+        <referenceContainer name="before.body.end">
+            <block name="is.in.wishlist" template="MageSuite_Wishlist::wishlist/is-in-wishlist.phtml" after="-" ifconfig="wishlist/additional_data/is_enabled"/>
+        </referenceContainer>
+    </body>
+</page>

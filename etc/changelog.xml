@@ -5,7 +5,10 @@
                 <entry>
                     <type>INIT</type>
                     <overview>Initial release</overview>
-                    <description>Extend wishlist in customerData, add product ids for all items from wishlist.</description>
+                    <description>
+                        Extend wishlist in customerData, add product ids for all items from wishlist.
+                        Add selected class for towishlist element for all product tiles that are on wishlist.
+                    </description>
                 </entry>
             </tag>
         </changelog>
