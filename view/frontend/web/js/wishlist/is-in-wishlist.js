@@ -10,7 +10,7 @@ define([
     return Component.extend({
         defaults: {
             toWishlistClass: '.towishlist',
-            wishlistItems: wishlistData().items
+            productIDs: wishlistData()['product_ids']
         },
         initialize: function () {
             this._super();
@@ -20,11 +20,11 @@ define([
         },
         checkWishlist: function() {
             if (
-                Array.isArray(this.wishlistItems) &&
-                this.wishlistItems.length
+                Array.isArray(this.productIDs) &&
+                this.productIDs.length
             ) {
-                this.wishlistItems.forEach((item) => {
-                    $(this.toWishlistClass + '[data-product-id=' + item['product_id'] + ']').addClass('selected');
+                this.productIDs.forEach((item) => {
+                    $(this.toWishlistClass + '[data-product-id=' + item + ']').addClass('selected');
                 });
             }
         },
