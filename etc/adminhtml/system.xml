@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="wishlist">
+            <label>Wish List</label>
+            <tab>customer</tab>
+            <resource>MageSuite_Wishlist::config_wishlist</resource>
+            <group id="additional_data" translate="label" type="text" sortOrder="10" showInDefault="1">
+                <label>Additional Data</label>
+                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Is Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enabling this will add additional data to the wishlist data available in CustomerData. This data can be used by frontend developers.</comment>
+                    <frontend_class>cs-csfeature__logo</frontend_class>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
