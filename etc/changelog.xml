@@ -1,0 +1,13 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:MageSuite_Changelog:etc/changelog.xsd">
+    <module id="MageSuite_Wishlist" name="MageSuite_Wishlist">
+        <changelog>
+            <tag version="1.0.0" date="2022-07-15">
+                <entry>
+                    <type>INIT</type>
+                    <overview>Initial release</overview>
+                    <description>Extend wishlist in customerData, add product ids for all items from wishlist.</description>
+                </entry>
+            </tag>
+        </changelog>
+    </module>
+</config>

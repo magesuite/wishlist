@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Wishlist\CustomerData\Wishlist">
+        <plugin name="add_product_ids_for_all_wishlist_items" type="MageSuite\Wishlist\Plugin\Wishlist\CustomerData\Wishlist\AddProductIdsForAllWishlistItems" sortOrder="10"/>
+    </type>
+</config>
