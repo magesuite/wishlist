@@ -1,5 +1,6 @@
 /**
- * 
+ * Block default add to wishlist form and use ajax instead
+ * The goal is to not reload the page or go to the user area after product is added to wishlist.
  */
 define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function($, customerData) {
     'use strict';
@@ -40,7 +41,6 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function
                     .done(
                         function (response) {
                             widget._onDoneHandler($trigger);
-                            $trigger.addClass('selected');
                         }.bind(widget)
                     )
                     .fail(
@@ -59,6 +59,8 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function
              * @param {object} response - ajax response
              */
             _onDoneHandler($trigger) {
+                $trigger.addClass('selected');
+
                 customerData.invalidate(['wishlist', 'messages']);
                 customerData.reload(['wishlist', 'messages'], true);
 
@@ -80,7 +82,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function
                     return;
                 }
 
-                const startingPosition = $trigger.find('svg')[0].getBoundingClientRect();
+                const startingPosition = $trigger.find('.towishlist-icon')[0].getBoundingClientRect();
                 const $clonedQtyHolder = $clonedBadge.find('.cs-header-user-nav__qty-counter-span');
                 $clonedQtyHolder.html(newQty);
 
@@ -111,7 +113,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function
              * @param {string} error - XHR error message
              */
             _onFailHandler(error) {
-
+                return;
             },
 
         });

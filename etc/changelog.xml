@@ -9,7 +9,7 @@
                         Extend wishlist in customerData, add product ids for all items from wishlist.
                         Add selected class for towishlist element for all product tiles and wishlist icons on PDP that are on wishlist.
                         Move tile ajax add-to-wishlist functionality from magesuite-priduct-tile-module.
-                        Add ajax add to wishlist functionsality for PDP wishlist icon.
+                        Add ajax add to wishlist functionality for PDP wishlist icon.
                     </description>
                 </entry>
             </tag>
