@@ -13,6 +13,17 @@
                     </description>
                 </entry>
             </tag>
+            <tag version="1.0.1" date="2022-07-21">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Add wishlist script to cms and cart pages. Handle the scenario when icon is missing</overview>
+                    <description>
+                        Initialize add-to-wishlist script for cms pages and cart page. For category, search results and PDP this script is already initialized by Magento.
+                        Handle the scenario where icon/image inside wishlist add-to trigger is missing.
+                    </description>
+                </entry>
+            </tag>
+        </changelog>
         </changelog>
     </module>
 </config>

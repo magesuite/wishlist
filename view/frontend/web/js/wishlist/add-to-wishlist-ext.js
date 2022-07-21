@@ -82,8 +82,11 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function
                     return;
                 }
 
-                const startingPosition = $trigger.find('.towishlist-icon')[0].getBoundingClientRect();
+                const icon = $trigger.find('.towishlist-icon')[0];
+                let $startingElement = icon ? icon : $trigger[0];
+                const startingPosition = $startingElement.getBoundingClientRect();
                 const $clonedQtyHolder = $clonedBadge.find('.cs-header-user-nav__qty-counter-span');
+                
                 $clonedQtyHolder.html(newQty);
 
                 $('body').append($clonedBadge);
