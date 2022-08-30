@@ -23,6 +23,25 @@
                     </description>
                 </entry>
             </tag>
+            <tag version="1.0.2" date="2022-07-21">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Remove duplicated tag in changelog file</overview>
+                </entry>
+            </tag>
+            <tag version="1.0.3" date="2022-08-30">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Expand wishlist feature to additional areas</overview>
+                    <description>
+                        Initialize add-to-wishlist script for all cms pages (not only homepage). 
+                        For category page, script was already initialized by Magento but only if product list was present.
+                        In case when category page was used as a landing page with static block type content only it was not applied.
+                        Now such scenario is also covered.
+                    </description>
+                    <ticket_id>SCAFA-683</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
