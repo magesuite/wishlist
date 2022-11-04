@@ -1,6 +1,6 @@
 {
     "name": "creativestyle/magesuite-wishlist",
-    "description": "MageSuite Wishlist",
+    "description": "This module enhances Magento’s wishlist by introducing Ajax add-to wishlist (without page reload) and possibility to style already selected wishlist icons on products",
     "homepage": "https://creativestyle.de",
     "license": "OSL-3.0",
     "type": "magento2-module",
