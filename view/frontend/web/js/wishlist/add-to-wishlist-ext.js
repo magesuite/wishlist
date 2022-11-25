@@ -2,7 +2,7 @@
  * Block default add to wishlist form and use ajax instead
  * The goal is to not reload the page or go to the user area after product is added to wishlist.
  */
-define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function($, customerData) {
+define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies'], function($, customerData, url) {
     'use strict';
 
     return function(addToWishlist) {
@@ -40,7 +40,13 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/cookies'], function
                 })
                     .done(
                         function (response) {
-                            widget._onDoneHandler($trigger);
+                            if (response.backUrl) {
+                                widget._onDoneHandler($trigger);
+                            } else {
+                                const uencParam = params.data.uenc ? params.data.uenc.replaceAll(',', '') : '';
+                                window.location.replace(url.build('customer/account/login/referer/' + uencParam));
+                            }
+                            
                         }.bind(widget)
                     )
                     .fail(
