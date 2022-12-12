@@ -34,7 +34,7 @@
                     <type>FIX</type>
                     <overview>Expand wishlist feature to additional areas</overview>
                     <description>
-                        Initialize add-to-wishlist script for all cms pages (not only homepage).
+                        Initialize add-to-wishlist script for all cms pages (not only homepage). 
                         For category page, script was already initialized by Magento but only if product list was present.
                         In case when category page was used as a landing page with static block type content only it was not applied.
                         Now such scenario is also covered.
@@ -48,17 +48,10 @@
                     <overview>Add redirect to login page when ajax request is done for guest user</overview>
                     <description>
                         Adding product to wishlist is possible only for logged in users by default (without guest-wishlist module).
-                        Ajax request not resolved with `backUrl` as a response will trigger redirect to login page with proper param
+                        Ajax request not resolved with `backUrl` as a response will trigger redirect to login page with proper param 
                         in order to add the product to the wishlist right after logging in.
                     </description>
                     <ticket_id>HAKA-1759</ticket_id>
-                </entry>
-            </tag>
-            <tag version="1.0.5" date="2022-12-06">
-                <entry>
-                    <type>FIX</type>
-                    <overview>Fix for doubled products when I merge guest and logged in user's Wishlist</overview>
-                    <ticket_id>MGS-4122</ticket_id>
                 </entry>
             </tag>
         </changelog>
