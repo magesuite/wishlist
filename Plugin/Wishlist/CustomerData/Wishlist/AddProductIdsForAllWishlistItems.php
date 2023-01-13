@@ -28,8 +28,10 @@ class AddProductIdsForAllWishlistItems
             return $result;
         }
 
-        $wishlistId = $this->wishlistHelper->getWishlist()->getId();
-        $result['product_ids'] = $this->getProductIds->execute($wishlistId);
+        $wishlistId = (int)$this->wishlistHelper->getWishlist()->getId();
+        $result['product_ids'] = $wishlistId > 0
+            ? $this->getProductIds->execute($wishlistId)
+            : [];
 
         return $result;
     }
