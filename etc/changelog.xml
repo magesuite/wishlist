@@ -54,6 +54,13 @@
                     <ticket_id>HAKA-1759</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.0.5" date="2023-03-07">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Adjust add to wishlist message</overview>
+                    <ticket_id>MGS-5091</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>

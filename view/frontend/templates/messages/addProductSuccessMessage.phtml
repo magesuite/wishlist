@@ -1,0 +1,9 @@
+<?php
+/**
+ * The second part of message was removed ('Click <a href="%1">here</a> to continue shopping')
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+
+<?= $block->escapeHtml(__('%1 has been added to your Wish List.', $block->getData('product_name'))) ?>

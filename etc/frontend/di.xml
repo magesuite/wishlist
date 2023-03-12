@@ -3,4 +3,15 @@
     <type name="Magento\Wishlist\CustomerData\Wishlist">
         <plugin name="add_product_ids_for_all_wishlist_items" type="MageSuite\Wishlist\Plugin\Wishlist\CustomerData\Wishlist\AddProductIdsForAllWishlistItems" sortOrder="10"/>
     </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="addProductSuccessMessage" xsi:type="array">
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">MageSuite_Wishlist::messages/addProductSuccessMessage.phtml</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
