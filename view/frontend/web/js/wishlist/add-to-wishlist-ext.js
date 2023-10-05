@@ -28,6 +28,11 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
             },
             ajaxAddToWishlist: function (event) {
                 const $trigger = $(event.currentTarget);
+
+                // Add selected class just after click in order to provide better user experience
+                // If ajax request fails selected class will be removed later
+                $trigger.addClass('selected');
+
                 let params = $trigger.data('post');
                 params.data['form_key'] = $.mage.cookies.get('form_key');
 
@@ -55,6 +60,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                                 response.responseJSON &&
                                 response.responseJSON.message
                             ) {
+                                $trigger.removeClass('selected');
                                 widget._onFailHandler(response.responseJSON.message);
                             }
                         }.bind(widget)
@@ -65,15 +71,17 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
              * @param {object} response - ajax response
              */
             _onDoneHandler($trigger) {
-                $trigger.addClass('selected');
-
                 customerData.invalidate(['wishlist', 'messages']);
                 customerData.reload(['wishlist', 'messages'], true);
 
-                const newQty = parseInt($('.cs-header-user-nav__qty-counter--wishlist .qty').text()) + 1;
-
                 const $wishlistBadge = $('.cs-header-user-nav .cs-header-user-nav__qty-counter--wishlist');
+
+                if (!$wishlistBadge.length) {
+                    return;
+                }
+
                 const wishlistBadgeRect = $wishlistBadge[0].getBoundingClientRect();
+                const newQty = parseInt($('.cs-header-user-nav__qty-counter--wishlist .qty').text()) + 1;
 
                 let $clonedBadge = $('.cs-header-user-nav__qty-counter--wishlist-cloned');
                 if ($clonedBadge.length) {

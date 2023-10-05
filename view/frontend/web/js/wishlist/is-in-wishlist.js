@@ -5,12 +5,9 @@ define([
 ], function ($, Component, customerData) {
     'use strict';
 
-    var wishlistData = customerData.get('wishlist');
-
     return Component.extend({
         defaults: {
-            toWishlistClass: '.towishlist',
-            productIDs: wishlistData()['product_ids']
+            toWishlistClass: '.towishlist'
         },
         initialize: function () {
             this._super();
@@ -19,14 +16,24 @@ define([
             return this;
         },
         checkWishlist: function() {
+            var wishlistData = customerData.get('wishlist');
+            this.updateProducts(wishlistData());
+
+            wishlistData.subscribe(function(updatedWishlistData) {
+                this.updateProducts(updatedWishlistData);
+            }.bind(this));
+        },
+        updateProducts: function(data) {
+            const productIDs = data['product_ids'];
+
             if (
-                Array.isArray(this.productIDs) &&
-                this.productIDs.length
+                Array.isArray(productIDs) &&
+                productIDs.length
             ) {
-                this.productIDs.forEach((item) => {
+                productIDs.forEach((item) => {
                     $(this.toWishlistClass + '[data-product-id=' + item + ']').addClass('selected');
                 });
             }
-        },
+        }
     });
 });

@@ -61,6 +61,13 @@
                     <ticket_id>MGS-5091</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.0.6" date="2023-10-05">
+                <entry>
+                    <type>FEAT</type>
+                    <overview>Adjust wishlist script in order to meet PWA theme requirements</overview>
+                    <ticket_id>NPW-98</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
