@@ -51,7 +51,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                                 const uencParam = params.data.uenc ? params.data.uenc.replaceAll(',', '') : '';
                                 window.location.replace(url.build('customer/account/login/referer/' + uencParam));
                             }
-                            
+
                         }.bind(widget)
                     )
                     .fail(
@@ -100,7 +100,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                 let $startingElement = icon ? icon : $trigger[0];
                 const startingPosition = $startingElement.getBoundingClientRect();
                 const $clonedQtyHolder = $clonedBadge.find('.cs-header-user-nav__qty-counter-span');
-                
+
                 $clonedQtyHolder.html(newQty);
 
                 $('body').append($clonedBadge);
