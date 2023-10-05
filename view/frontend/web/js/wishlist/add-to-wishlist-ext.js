@@ -28,6 +28,9 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
             },
             ajaxAddToWishlist: function (event) {
                 const $trigger = $(event.currentTarget);
+
+                // Add selected class just after click in order to provide better user experience
+                // If ajax request fails selected class will be removed later
                 $trigger.addClass('selected');
 
                 let params = $trigger.data('post');
@@ -57,6 +60,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                                 response.responseJSON &&
                                 response.responseJSON.message
                             ) {
+                                $trigger.removeClass('selected');
                                 widget._onFailHandler(response.responseJSON.message);
                             }
                         }.bind(widget)

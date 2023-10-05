@@ -21,7 +21,6 @@ define([
 
             wishlistData.subscribe(function(updatedWishlistData) {
                 this.updateProducts(updatedWishlistData);
-                debugger;
             }.bind(this));
         },
         updateProducts: function(data) {
