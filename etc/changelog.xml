@@ -68,6 +68,18 @@
                     <ticket_id>NPW-98</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.0.10" date="2024-07-24">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Delay initialization of the script until DOM ready</overview>
+                    <description>
+                        Checking if item is in wishlist fails to add `selected` class when product
+                        is located inside of the carousel on PDP (related, crosssell, etc.) because 
+                        of the script being triggered too soon.
+                    </description>
+                    <ticket_id>KRA-1629</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
