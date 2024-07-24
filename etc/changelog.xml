@@ -74,7 +74,7 @@
                     <overview>Delay initialization of the script until DOM ready</overview>
                     <description>
                         Checking if item is in wishlist fails to add `selected` class when product
-                        is located inside of the carousel on PDP (related, crosssell, etc.) because 
+                        is located inside of the carousel on PDP (related, crosssell, etc.) because
                         of the script being triggered too soon.
                     </description>
                     <ticket_id>KRA-1629</ticket_id>
