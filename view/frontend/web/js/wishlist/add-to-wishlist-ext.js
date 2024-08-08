@@ -81,7 +81,7 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                 }
 
                 const wishlistBadgeRect = $wishlistBadge[0].getBoundingClientRect();
-                const newQty = parseInt($('.cs-header-user-nav__qty-counter--wishlist .qty').text()) + 1;
+                const newQty = parseInt($('.cs-header-user-nav__qty-counter--wishlist .qty').first().text()) + 1;
 
                 let $clonedBadge = $('.cs-header-user-nav__qty-counter--wishlist-cloned');
                 if ($clonedBadge.length) {
