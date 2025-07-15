@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\Wishlist\Model\ResourceModel\Wishlist;
 
 class GetProductIds
@@ -11,11 +13,15 @@ class GetProductIds
         $this->connection = $resourceConnection->getConnection();
     }
 
-    public function execute(int $wishlistId): array
+    public function execute(int $wishlistId, array $storeIds = []): array
     {
-        $select = $this->connection->select()
-            ->from(['wi' => $this->connection->getTableName('wishlist_item')], ['product_id'])
-            ->where('wi.wishlist_id = ?', $wishlistId);
+        $select = $this->connection->select();
+        $select->from(['wi' => $this->connection->getTableName('wishlist_item')], ['product_id']);
+        $select->where('wi.wishlist_id = ?', $wishlistId);
+
+        if (!empty($storeIds)) {
+            $select->where('wi.store_id IN (?)', $storeIds);
+        }
 
         return $this->connection->fetchCol($select);
     }
