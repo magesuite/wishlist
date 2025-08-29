@@ -14,4 +14,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Wishlist\Controller\Index\Remove">
+        <plugin name="result_json_for_ajax_request" type="MageSuite\Wishlist\Plugin\Wishlist\Controller\Index\Remove\ResultJsonForAjaxRequest" sortOrder="10"/>
+    </type>
 </config>

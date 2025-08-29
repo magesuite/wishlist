@@ -1,12 +1,23 @@
 /**
- * Block default add to wishlist form and use ajax instead
- * The goal is to not reload the page or go to the user area after product is added to wishlist.
+ * Mixin Entritely overwritten:
+ * - introduced ajax add and ajax delete method (see related logic in is-in-wishlist component)
  */
-define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies'], function($, customerData, url) {
+define([
+    'jquery',
+    'Magento_Customer/js/customer-data',
+    'mage/url',
+    'mage/translate',
+    'mage/cookies',
+], function ($, customerData, url, $t) {
     'use strict';
 
-    return function(addToWishlist) {
+    return function (addToWishlist) {
         $.widget('mage.addToWishlist', addToWishlist, {
+            options: {
+                addToWishlistTitle: $t('Add to Wishlist'),
+                addToWishlistLabel: $t('Add %1 to wishlist'),
+                removeFromWishlistText: $t('Remove %1 from wishlist'),
+            },
             /**
              * Validate product quantity before updating Wish List
              * After validation passed call ajaxAddToWishlist action
@@ -20,20 +31,51 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                 event.preventDefault();
                 event.stopPropagation();
 
-                if (element.length && !(element.validation() && element.validation('isValid'))) {
+                if (
+                    element.length &&
+                    !(element.validation() && element.validation('isValid'))
+                ) {
                     return;
+                }
+
+                const trigger = event.currentTarget;
+                if (
+                    trigger.classList.contains('selected') &&
+                    trigger.dataset.itemRemoveParams
+                ) {
+                    this.ajaxDeleteFromWishlist(trigger);
                 } else {
-                    this.ajaxAddToWishlist(event);
+                    this.ajaxAddToWishlist(trigger);
                 }
             },
-            ajaxAddToWishlist: function (event) {
-                const $trigger = $(event.currentTarget);
+            ajaxDeleteFromWishlist: function (trigger) {
+                // Remove selected class just after click in order to provide better user experience
+                // If ajax request fails selected class will added back later
+                this._triggerSelected(trigger, false);
 
+                const params = JSON.parse(trigger.dataset.itemRemoveParams);
+                params.data['form_key'] = $.mage.cookies.get('form_key');
+
+                $.ajax({
+                    method: 'POST',
+                    url: params.action,
+                    data: params.data,
+                })
+                .done(() => {
+                    this._triggerSelected(trigger, false);
+                    trigger.removeAttribute('data-item-remove-params');
+                    this.reloadMessages();
+                })
+                .fail(() => {
+                    this._triggerSelected(trigger);
+                });
+            },
+            ajaxAddToWishlist: function (trigger) {
                 // Add selected class just after click in order to provide better user experience
-                // If ajax request fails selected class will be removed later
-                $trigger.addClass('selected');
+                // If ajax request fails selected class will be removed later, error will be served by BE to messages
+                this._triggerSelected(trigger);
 
-                let params = $trigger.data('post');
+                const params = $(trigger).data('post');
                 params.data['form_key'] = $.mage.cookies.get('form_key');
 
                 const widget = this;
@@ -43,28 +85,47 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                     url: params.action,
                     data: params.data,
                 })
-                    .done(
-                        function (response) {
-                            if (response.backUrl) {
-                                widget._onDoneHandler($trigger);
-                            } else {
-                                const uencParam = params.data.uenc ? params.data.uenc.replaceAll(',', '') : '';
-                                window.location.replace(url.build('customer/account/login/referer/' + uencParam));
-                            }
+                .done((response) => {
+                    if (response.backUrl) {
+                        this._triggerSelected(trigger);
 
-                        }.bind(widget)
-                    )
-                    .fail(
-                        function (response) {
-                            if (
-                                response.responseJSON &&
-                                response.responseJSON.message
-                            ) {
-                                $trigger.removeClass('selected');
-                                widget._onFailHandler(response.responseJSON.message);
-                            }
-                        }.bind(widget)
-                    );
+                        widget._onDoneHandler($(trigger));
+
+                        this.reloadCustomerData();
+                        this.reloadMessages();
+                    } else {
+                        const uencParam = params.data.uenc
+                            ? params.data.uenc.replaceAll(',', '')
+                            : '';
+                        window.location.replace(
+                            url.build(
+                                'customer/account/login/referer/' +
+                                uencParam
+                            )
+                        );
+                    }
+                })
+                .fail(() => this._triggerSelected(trigger, false));
+            },
+            /**
+             * Toggle element class, label and title attributes
+             * 
+             * @param {Object} element
+             * @param {Boolean} selected // pass 'false' to disable selected
+             */
+            _triggerSelected(element, selected = true) {
+                const $element = $(element),
+                    productName = $element.attr('data-product-name') || '',
+                    removeText = this.options.removeFromWishlistText.replace('%1', productName);
+
+                if (selected) {
+                    $element.addClass('selected');
+                } else {
+                    $element.removeClass('selected');
+                }
+
+                $element.attr('title', selected ? removeText : this.options.addToWishlistTitle);
+                $element.attr('aria-label', selected ? removeText : this.options.addToWishlistLabel.replace('%1', productName));
             },
             /**
              * After AJAX request returned with data -
@@ -122,17 +183,16 @@ define(['jquery', 'Magento_Customer/js/customer-data', 'mage/url', 'mage/cookies
                 $clonedBadge.one('transitionend', function() {
                     $clonedBadge.remove();
                 });
-
             },
-
-            /**
-             * After AJAX request FAILED -
-             * @param {string} error - XHR error message
-             */
-            _onFailHandler(error) {
-                return;
+            reloadCustomerData: function () {
+                customerData.reload(['wishlist'], true);
             },
-
+            reloadMessages: function () {
+                // Hide message after 5 seconds 
+                setTimeout(function() {
+                    customerData.reload(['messages'], true);
+                }, 5000);
+            },
         });
 
         return $.mage.addToWishlist;
