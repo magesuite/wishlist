@@ -18,6 +18,45 @@ define([
                 addToWishlistLabel: $t('Add %1 to wishlist'),
                 removeFromWishlistText: $t('Remove %1 from wishlist'),
             },
+            _create: function () {
+                this._super();
+                this._bindQtyUrlUpdate();
+            },
+            /**
+             * Keep the qty segment of the configure page URL in sync with the qty input.
+             * Works for both guest and logged-in customers (frontend only, no auth dependency).
+             *
+             * @private
+             */
+            _bindQtyUrlUpdate: function () {
+                const events = {};
+                console.log(this.options.qtyInfo)
+                events['change ' + this.options.qtyInfo] = function () {
+                    this._updateUrlQty($(this.options.qtyInfo).val());
+                };
+                this._on(events);
+            },
+            /**
+             * @param {String|Number} qty
+             * @private
+             */
+            _updateUrlQty: function (qty) {
+                const parsedQty = parseInt(qty, 10);
+
+                if (!parsedQty || !window.history || !window.history.replaceState) {
+                    return;
+                }
+
+                const currentUrl = window.location.href;
+                if (!/\/qty\/\d+/.test(currentUrl)) {
+                    return;
+                }
+
+                const newUrl = currentUrl.replace(/(\/qty\/)\d+/, '$1' + parsedQty);
+                if (newUrl !== currentUrl) {
+                    window.history.replaceState({}, '', newUrl);
+                }
+            },
             /**
              * Validate product quantity before updating Wish List
              * After validation passed call ajaxAddToWishlist action
@@ -39,6 +78,11 @@ define([
                 }
 
                 const trigger = event.currentTarget;
+                if (trigger.classList.contains('updated')) {
+                    this.ajaxUpdateWishlist(trigger);
+                    return;
+                }
+
                 if (
                     trigger.classList.contains('selected') &&
                     trigger.dataset.itemRemoveParams
@@ -47,6 +91,37 @@ define([
                 } else {
                     this.ajaxAddToWishlist(trigger);
                 }
+            },
+            /**
+             * Update an existing Wish List item (configure page "Update wishlist" button).
+             * Unlike adding, the backend returns a redirect, so on success we navigate to
+             * the Wish List page where the updated item and success message are shown.
+             *
+             * @param {HTMLElement} trigger
+             */
+            ajaxUpdateWishlist: function (trigger) {
+                this._triggerWishlistFormUpdate();
+
+                const params = $(trigger).data('post');
+                if (!params || !params.action) {
+                    return;
+                }
+
+                params.data['form_key'] = $.mage.cookies.get('form_key');
+
+                $.ajax({
+                    method: 'POST',
+                    url: params.action,
+                    data: params.data,
+                })
+                .done((response) => {
+                    const backUrl =
+                        response && response.backUrl
+                            ? response.backUrl
+                            : url.build('wishlist');
+
+                    window.location.assign(backUrl);
+                });
             },
             ajaxDeleteFromWishlist: function (trigger) {
                 // Remove selected class just after click in order to provide better user experience
@@ -109,7 +184,7 @@ define([
             },
             /**
              * Toggle element class, label and title attributes
-             * 
+             *
              * @param {Object} element
              * @param {Boolean} selected // pass 'false' to disable selected
              */
@@ -188,7 +263,7 @@ define([
                 customerData.reload(['wishlist'], true);
             },
             reloadMessages: function () {
-                // Hide message after 5 seconds 
+                // Hide message after 5 seconds
                 setTimeout(function() {
                     customerData.reload(['messages'], true);
                 }, 5000);
