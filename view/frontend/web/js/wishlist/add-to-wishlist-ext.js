@@ -93,8 +93,10 @@ define([
             },
             /**
              * Update an existing Wish List item (configure page "Update wishlist" button).
-             * Unlike adding, the backend returns a redirect, so on success we navigate to
-             * the Wish List page where the updated item and success message are shown.
+             * Unlike adding, the backend answers with Magento's normal redirect (which carries
+             * the wishlist_id), so on success we navigate to the URL the request actually
+             * resolved to - preserving the correct wishlist on multiple/non-default lists -
+             * instead of a hardcoded wishlist page.
              *
              * @param {HTMLElement} trigger
              */
@@ -108,18 +110,25 @@ define([
 
                 params.data['form_key'] = $.mage.cookies.get('form_key');
 
+                let nativeXhr = null;
+
                 $.ajax({
                     method: 'POST',
                     url: params.action,
                     data: params.data,
+                    xhr: function () {
+                        nativeXhr = $.ajaxSettings.xhr();
+                        return nativeXhr;
+                    },
                 })
                 .done((response) => {
-                    const backUrl =
-                        response && response.backUrl
-                            ? response.backUrl
-                            : url.build('wishlist');
+                    let backUrl = response && response.backUrl ? response.backUrl : null;
 
-                    window.location.assign(backUrl);
+                    if (!backUrl && nativeXhr && nativeXhr.responseURL) {
+                        backUrl = nativeXhr.responseURL;
+                    }
+
+                    window.location.assign(backUrl || url.build('wishlist'));
                 });
             },
             ajaxDeleteFromWishlist: function (trigger) {
