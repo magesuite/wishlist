@@ -30,7 +30,6 @@ define([
              */
             _bindQtyUrlUpdate: function () {
                 const events = {};
-                console.log(this.options.qtyInfo)
                 events['change ' + this.options.qtyInfo] = function () {
                     this._updateUrlQty($(this.options.qtyInfo).val());
                 };
