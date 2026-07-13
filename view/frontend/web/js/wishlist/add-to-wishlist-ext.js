@@ -109,7 +109,7 @@ define([
             },
             /**
              * Toggle element class, label and title attributes
-             * 
+             *
              * @param {Object} element
              * @param {Boolean} selected // pass 'false' to disable selected
              */
@@ -188,7 +188,7 @@ define([
                 customerData.reload(['wishlist'], true);
             },
             reloadMessages: function () {
-                // Hide message after 5 seconds 
+                // Hide message after 5 seconds
                 setTimeout(function() {
                     customerData.reload(['messages'], true);
                 }, 5000);

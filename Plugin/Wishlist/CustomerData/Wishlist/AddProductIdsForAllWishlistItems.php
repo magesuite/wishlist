@@ -20,10 +20,15 @@ class AddProductIdsForAllWishlistItems
             return $result;
         }
 
-        $storeIds = $this->wishlistHelper->getWishlist()->getSharedStoreIds();
-        $wishlistId = (int) $this->wishlistHelper->getWishlist()->getId();
+        $wishlist = $this->wishlistHelper->getWishlist();
+
+        if ($wishlist === null) {
+            return $result;
+        }
+
+        $wishlistId = (int) $wishlist->getId();
         $result['product_ids'] = $wishlistId > 0
-            ? $this->getProductIds->execute($wishlistId, $storeIds)
+            ? $this->getProductIds->execute($wishlistId, $wishlist->getSharedStoreIds())
             : [];
 
         $result['items_remove_data'] = $this->getItemsRemoveData();
@@ -33,10 +38,16 @@ class AddProductIdsForAllWishlistItems
 
     protected function getItemsRemoveData(): array
     {
+        $itemCollection = $this->getWishlistItemCollection();
+
+        if ($itemCollection === null) {
+            return [];
+        }
+
         $items = [];
 
         /** @var \Magento\Wishlist\Model\Item $item */
-        foreach ($this->getWishlistItemCollection() as $item) {
+        foreach ($itemCollection as $item) {
             $items[] = [
                 'product_id' => $item->getProductId(),
                 'item_remove_params' => $this->wishlistHelper->getRemoveParams($item),
@@ -46,9 +57,13 @@ class AddProductIdsForAllWishlistItems
         return $items;
     }
 
-    protected function getWishlistItemCollection(): \Magento\Wishlist\Model\ResourceModel\Item\Collection
+    protected function getWishlistItemCollection(): ?\Magento\Wishlist\Model\ResourceModel\Item\Collection
     {
         $wishlist = $this->wishlistHelper->getWishlist();
+
+        if ($wishlist === null) {
+            return null;
+        }
 
         $collection = $this->collectionFactory->create();
         $collection->addWishlistFilter($wishlist);

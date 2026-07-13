@@ -95,7 +95,7 @@
                     <type>FEAT</type>
                     <overview>Added remove from wishlist functionality</overview>
                     <description>
-                        Added loading class on wishlist icon, added filled heart icon when product is in wishlist. 
+                        Added loading class on wishlist icon, added filled heart icon when product is in wishlist.
                         And added possibility to remove product from wishlist on click on filled heart icon.
                     </description>
                     <ticket_id>MGS-5522</ticket_id>
