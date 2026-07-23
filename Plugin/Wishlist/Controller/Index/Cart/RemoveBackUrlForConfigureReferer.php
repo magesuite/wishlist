@@ -14,8 +14,10 @@ class RemoveBackUrlForConfigureReferer
     ) {
     }
 
-    public function afterExecute(\Magento\Wishlist\Controller\Index\Cart $subject, $result)
-    {
+    public function afterExecute(
+        \Magento\Wishlist\Controller\Index\Cart $subject,
+        \Magento\Framework\Controller\ResultInterface $result
+    ): \Magento\Framework\Controller\ResultInterface {
         if (!$result instanceof \Magento\Framework\Controller\Result\Json) {
             return $result;
         }
