@@ -38,7 +38,7 @@ class RemoveBackUrlForConfigureReferer
         if ($this->cartHelper->getShouldRedirectToCart()) {
             return false;
         }
-        
+
         return true;
     }
 

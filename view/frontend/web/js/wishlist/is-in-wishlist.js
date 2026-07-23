@@ -42,7 +42,7 @@ define([
                     );
                     wishlistElements.forEach((wishlistElement) => {
                         const productName = wishlistElement.getAttribute('data-product-name') || '';
-                            
+
                         wishlistElement.classList.add('selected');
                         wishlistElement.setAttribute('title', removeText.replace('%1', productName));
                         wishlistElement.setAttribute('aria-label', removeText.replace('%1', productName));
