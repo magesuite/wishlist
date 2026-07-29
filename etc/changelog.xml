@@ -101,6 +101,19 @@
                     <ticket_id>MGS-5522</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.0.13" date="2026-06-26">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Fix updating an existing wishlist item from the configure page</overview>
+                    <description>
+                        The "Update wishlist" button on the configure page now submits via ajax and
+                        redirects to the wishlist page on success instead of redirecting to login
+                        (works for guest and logged-in customers).
+                        Additionally the qty segment of the configure page URL is kept in sync with
+                        the qty input.
+                    </description>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>

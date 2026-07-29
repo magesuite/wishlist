@@ -18,6 +18,44 @@ define([
                 addToWishlistLabel: $t('Add %1 to wishlist'),
                 removeFromWishlistText: $t('Remove %1 from wishlist'),
             },
+            _create: function () {
+                this._super();
+                this._bindQtyUrlUpdate();
+            },
+            /**
+             * Keep the qty segment of the configure page URL in sync with the qty input.
+             * Works for both guest and logged-in customers (frontend only, no auth dependency).
+             *
+             * @private
+             */
+            _bindQtyUrlUpdate: function () {
+                const events = {};
+                events['change ' + this.options.qtyInfo] = function () {
+                    this._updateUrlQty($(this.options.qtyInfo).val());
+                };
+                this._on(events);
+            },
+            /**
+             * @param {String|Number} qty
+             * @private
+             */
+            _updateUrlQty: function (qty) {
+                const parsedQty = parseInt(qty, 10);
+
+                if (!parsedQty || !window.history || !window.history.replaceState) {
+                    return;
+                }
+
+                const currentUrl = window.location.href;
+                if (!/\/qty\/\d+/.test(currentUrl)) {
+                    return;
+                }
+
+                const newUrl = currentUrl.replace(/(\/qty\/)\d+/, '$1' + parsedQty);
+                if (newUrl !== currentUrl) {
+                    window.history.replaceState({}, '', newUrl);
+                }
+            },
             /**
              * Validate product quantity before updating Wish List
              * After validation passed call ajaxAddToWishlist action
@@ -39,6 +77,11 @@ define([
                 }
 
                 const trigger = event.currentTarget;
+                if (trigger.classList.contains('updated')) {
+                    this.ajaxUpdateWishlist(trigger);
+                    return;
+                }
+
                 if (
                     trigger.classList.contains('selected') &&
                     trigger.dataset.itemRemoveParams
@@ -47,6 +90,46 @@ define([
                 } else {
                     this.ajaxAddToWishlist(trigger);
                 }
+            },
+            /**
+             * Update an existing Wish List item (configure page "Update wishlist" button).
+             * Unlike adding, the backend answers with Magento's normal redirect (which carries
+             * the wishlist_id), so on success we navigate to the URL the request actually
+             * resolved to - preserving the correct wishlist on multiple/non-default lists -
+             * instead of a hardcoded wishlist page.
+             *
+             * @param {HTMLElement} trigger
+             */
+            ajaxUpdateWishlist: function (trigger) {
+                this._triggerWishlistFormUpdate();
+
+                const params = $(trigger).data('post');
+                if (!params || !params.action) {
+                    return;
+                }
+
+                params.data['form_key'] = $.mage.cookies.get('form_key');
+
+                let nativeXhr = null;
+
+                $.ajax({
+                    method: 'POST',
+                    url: params.action,
+                    data: params.data,
+                    xhr: function () {
+                        nativeXhr = $.ajaxSettings.xhr();
+                        return nativeXhr;
+                    },
+                })
+                .done((response) => {
+                    let backUrl = response && response.backUrl ? response.backUrl : null;
+
+                    if (!backUrl && nativeXhr && nativeXhr.responseURL) {
+                        backUrl = nativeXhr.responseURL;
+                    }
+
+                    window.location.assign(backUrl || url.build('wishlist'));
+                });
             },
             ajaxDeleteFromWishlist: function (trigger) {
                 // Remove selected class just after click in order to provide better user experience
